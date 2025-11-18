@@ -1,0 +1,11 @@
+model Course {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  level       String?   
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  lessons     Lesson[]
+  enrollments Enrollment[]
+}

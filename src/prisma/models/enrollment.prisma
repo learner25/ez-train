@@ -1,0 +1,9 @@
+model Enrollment {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  courseId   Int
+  enrolledAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+}
