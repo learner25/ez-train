@@ -1,6 +1,6 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get,Post,Body, Param, ParseIntPipe } from '@nestjs/common';
 import { CourseService } from './course.service';
-
+import { CreateCourseInput, UpdateCourseInput } from './dto/course.dto';
 @Controller('courses')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
@@ -16,4 +16,9 @@ export class CourseController {
   async getCourseById(@Param('id', ParseIntPipe) id: number) {
     return this.courseService.getCourseById(id);
   }
+  @Post()
+  async createCourse(@Body() createCourseInput: CreateCourseInput) {
+    return this.courseService.create(createCourseInput);
+  }
+
 }
