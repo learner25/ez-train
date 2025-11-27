@@ -1,4 +1,4 @@
-import { Controller, Get,Post,Body,Patch, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get,Post,Body,Patch,Delete, Param, ParseIntPipe } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseInput, UpdateCourseInput } from './dto/course.dto';
 @Controller('courses')
@@ -28,5 +28,8 @@ export class CourseController {
 ) {
   return this.courseService.update(id, updateCourseInput);
 }
-
+ @Delete(':id')
+  async deleteCourse(@Param('id', ParseIntPipe) id: number) {
+    return this.courseService.delete(id);
+  }
 }

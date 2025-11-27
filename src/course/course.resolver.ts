@@ -29,6 +29,6 @@ export class CourseResolver {
 
   @Mutation(() => Boolean)
   deleteCourse(@Args('id', { type: () => Int }) id: number) {
-    return this.service.remove(id).then(() => true);
+    return this.service.delete(id).then(() => true);
   }
 }

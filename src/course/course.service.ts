@@ -62,7 +62,7 @@ export class CourseService {
   }
 
  
-  async remove(id: number) {
+  async delete(id: number) {
     const exists = await this.prisma.course.findUnique({ where: { id } });
     if (!exists) throw new NotFoundException(`Course with id ${id} not found`);
 
