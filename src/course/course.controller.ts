@@ -1,4 +1,4 @@
-import { Controller, Get,Post,Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get,Post,Body,Patch, Param, ParseIntPipe } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseInput, UpdateCourseInput } from './dto/course.dto';
 @Controller('courses')
@@ -20,5 +20,13 @@ export class CourseController {
   async createCourse(@Body() createCourseInput: CreateCourseInput) {
     return this.courseService.create(createCourseInput);
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCourseInput: UpdateCourseInput,
+) {
+  return this.courseService.update(id, updateCourseInput);
+}
 
 }
