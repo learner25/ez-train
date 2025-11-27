@@ -4,6 +4,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrismaModule } from './prisma/prisma.module';
 import { CourseModule } from './course/course.module';
 
+
 @Module({
   imports: [
     PrismaModule, // 👈 REQUIRED
