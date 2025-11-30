@@ -82,6 +82,6 @@ Body → JSON:
 {
   "title": "NestJS Deep Dive",
   "description": "Advanced backend concepts.",
-  "price": 59.99
+ 
 }
  
