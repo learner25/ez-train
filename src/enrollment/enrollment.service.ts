@@ -1,31 +1,35 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EnrollInput } from './dto/enroll.input';
+import { EnrollDto } from './dto/enroll.dto';
 
 @Injectable()
 export class EnrollmentService {
   constructor(private prisma: PrismaService) {}
 
-  async enroll(input: EnrollInput) {
-    const { userId, courseId } = input;
+  async enroll(data: EnrollDto) {
+    const { userId, courseId } = data;
 
-    // check if user exists
+    // Check user exists
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
-    // check if course exists
+    // Check course exists
     const course = await this.prisma.course.findUnique({ where: { id: courseId } });
     if (!course) throw new NotFoundException('Course not found');
 
-    // check if already enrolled
+    // Check if already enrolled
     const existing = await this.prisma.enrollment.findFirst({
       where: { userId, courseId },
     });
     if (existing) throw new ConflictException('Already enrolled');
 
+    // Create enrollment
     return this.prisma.enrollment.create({
       data: { userId, courseId },
-      include: { course: true },
     });
   }
 
