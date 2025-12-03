@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
 import { LessonService } from './lesson.service';
 import { CreateLessonInput } from './dto/create-lesson.input';
 import { UpdateLessonInput } from './dto/update-lesson.input';
@@ -6,7 +14,10 @@ import { UpdateLessonInput } from './dto/update-lesson.input';
 @Controller('lessons')
 export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
-
+  @Get()
+  getCourses() {
+    return this.lessonService.getAllLessons();
+  }
   @Post()
   create(@Body() data: CreateLessonInput) {
     return this.lessonService.createLesson(data);

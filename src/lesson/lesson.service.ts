@@ -6,6 +6,18 @@ import { UpdateLessonInput } from './dto/update-lesson.input';
 @Injectable()
 export class LessonService {
   constructor(private readonly prisma: PrismaService) {}
+  private defaultInclude = {
+    quizzes: {
+      include: {
+        questions: true,
+      },
+    },
+  };
+  async getAllLessons() {
+    return this.prisma.lesson.findMany({
+      include: this.defaultInclude,
+    });
+  }
 
   // CREATE
   async createLesson(data: CreateLessonInput) {

@@ -8,21 +8,21 @@ async function main() {
   await prisma.user.createMany({
     data: [
       {
-        id: "user_1",
+        id: "1",
         name: "John Doe",
         email: "john@example.com",
         emailVerified: true,
         image: "https://i.pravatar.cc/150?img=1",
       },
       {
-        id: "user_2",
+        id: "2",
         name: "Sarah Smith",
         email: "sarah@example.com",
         emailVerified: false,
         image: "https://i.pravatar.cc/150?img=3",
       },
       {
-        id: "user_3",
+        id: "3",
         name: "Mike Johnson",
         email: "mike@example.com",
         emailVerified: true,
@@ -39,7 +39,7 @@ async function main() {
       id: "sess_1",
       token: "TOKEN_123",
       expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      userId: "user_1",
+      userId: "1",
     },
   });
 
@@ -49,7 +49,7 @@ async function main() {
       id: "acc_1",
       accountId: "123",
       providerId: "github",
-      userId: "user_1",
+      userId: "1",
       accessToken: "ABC123",
       refreshToken: "XYZ456",
     },

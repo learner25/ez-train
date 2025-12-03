@@ -12,5 +12,5 @@ export class CreateLessonInput {
   description?: string;
 
   @Field({ nullable: true })
-  content?: any;
+  content: string;
 }
