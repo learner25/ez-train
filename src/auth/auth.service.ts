@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
@@ -7,7 +11,7 @@ import { randomUUID } from 'crypto';
 export class AuthService {
   constructor(private prisma: PrismaService) {}
 
-  // REGISTER
+  // REGISTER --------------------------------------------------------
   async register(data: { name: string; email: string; password: string }) {
     const existing = await this.prisma.user.findUnique({
       where: { email: data.email },
@@ -34,10 +38,19 @@ export class AuthService {
       },
     });
 
-    return user;
+    // Return EXACT shape requested
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      emailVerified: user.emailVerified,
+      image: user.image,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   }
 
-  // LOGIN
+  // LOGIN -----------------------------------------------------------
   async login(email: string, password: string) {
     const account = await this.prisma.account.findFirst({
       where: {
@@ -55,7 +68,7 @@ export class AuthService {
     // Create session token
     const token = randomUUID();
 
-    await this.prisma.session.create({
+    const session = await this.prisma.session.create({
       data: {
         id: randomUUID(),
         token,
@@ -64,10 +77,24 @@ export class AuthService {
       },
     });
 
-    return { token, user: account.user };
+    const u = account.user;
+
+    // EXACT RESPONSE SHAPE:
+    return {
+      token: session.token,
+      user: {
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        emailVerified: u.emailVerified,
+        image: u.image,
+        createdAt: u.createdAt,
+        updatedAt: u.updatedAt,
+      },
+    };
   }
 
-  // VALIDATE TOKEN
+  // VALIDATE / ME ---------------------------------------------------
   async validate(token: string) {
     const session = await this.prisma.session.findUnique({
       where: { token },
@@ -78,15 +105,31 @@ export class AuthService {
       throw new UnauthorizedException('Invalid or expired session');
     }
 
-    return session.user;
+    const u = session.user;
+
+    // EXACT RESPONSE SHAPE FOR /me (no token in output)
+    return {
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      emailVerified: u.emailVerified,
+      image: u.image,
+      createdAt: u.createdAt,
+      updatedAt: u.updatedAt,
+    };
   }
 
-  // LOGOUT
+  // LOGOUT ----------------------------------------------------------
   async logout(token: string) {
-    await this.prisma.session.delete({
-      where: { token },
-    });
-
-    return { message: 'Logged out' };
+  if (!token) {
+    throw new UnauthorizedException('Missing session token');
   }
+
+  await this.prisma.session.delete({
+    where: { token },
+  });
+
+  return { message: 'Logged out' };
+}
+
 }

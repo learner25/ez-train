@@ -4,31 +4,57 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+  constructor(private prisma: PrismaService) {}
 
-  async canActivate(context: ExecutionContext) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const req = context.switchToHttp().getRequest();
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const token =
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      req.headers['x-session-token'] ||
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      req.headers['authorization']?.replace('Bearer ', '');
+    // Accept tokens from all common header names
+    const authHeader = request.headers['authorization'];
+    const sessionToken = 
+      request.headers['x-session-token'] ||
+      request.headers['session-token'] ||
+      request.headers['token'];
+
+    let token: string | null = null;
+
+     
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.slice(7);
+    }
+
+   
+    if (!token && sessionToken) {
+      token = sessionToken;
+    }
 
     if (!token) {
       throw new UnauthorizedException('Missing session token');
     }
 
-    const user = await this.authService.validate(token);
+    // Validate session
+    const session = await this.prisma.session.findUnique({
+      where: { token },
+      include: { user: true },
+    });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    req.user = user;
+    if (!session) {
+      throw new UnauthorizedException('Invalid session token');
+    }
+
+    
+    if (session.expiresAt < new Date()) {
+      throw new UnauthorizedException('Session expired');
+    }
+
+     
+    request.user = session.user;
+    request.session = session;
+
     return true;
   }
 }

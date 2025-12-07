@@ -6,12 +6,15 @@ import {
   Delete,
   Param,
   Body,
+  UseGuards,
 } from '@nestjs/common';
 import { LessonService } from './lesson.service';
 import { CreateLessonInput } from './dto/create-lesson.input';
 import { UpdateLessonInput } from './dto/update-lesson.input';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('lessons')
+@UseGuards(AuthGuard)
 export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
   @Get()
