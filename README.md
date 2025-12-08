@@ -30,7 +30,8 @@ A RESTful API built with **NestJS** and **Prisma ORM** for managing course data.
 ---
 
 ## 🗂 Project Structure
-
+# For Swagger api visit 
+```https://ez-train.vercel.app/api
 
 ---
 
