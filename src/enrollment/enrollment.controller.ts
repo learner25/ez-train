@@ -9,7 +9,7 @@ import {
 import { EnrollmentService } from './enrollment.service';
 import { EnrollDto } from './dto/enroll.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { CurrentUser } from 'src/auth/decorator/current-user.decorator'; 
+import { CurrentUser } from '../auth/decorator/current-user.decorator'; 
 
 @Controller('enrollments')
 @UseGuards(AuthGuard)
