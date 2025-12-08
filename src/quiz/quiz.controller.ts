@@ -11,7 +11,8 @@ import {
 import { QuizService } from './quiz.service';
 import { TakeQuizDto } from './dto/take-quiz.dto';
 import { AuthGuard } from '../auth/auth.guard';
-
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth()
 @Controller('quizzes')
 @UseGuards(AuthGuard)
 export class QuizController {
@@ -22,7 +23,7 @@ export class QuizController {
     @Param('quizId', ParseIntPipe) quizId: number,
     @Body() dto: TakeQuizDto,
     @Req() req,
-     @Headers('x-session-token') token: string,
+    
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     const userId = req.user.id;
