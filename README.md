@@ -3,7 +3,7 @@
 
 A brief description of what this project does and who it's for
 # For Swagger api docs,visit: 
-##[https://ez-train.vercel.app/api](https://ez-train.vercel.app/api)
+## [https://ez-train.vercel.app/api](https://ez-train.vercel.app/api)
 # 📚 Courses API (NestJS + Prisma)
 
 A RESTful API built with **NestJS** and **Prisma ORM** for managing course data.
