@@ -26,13 +26,13 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout() {
+  logout(@Headers('x-session-token') token: string) {
     return this.authService.logout(token);
   }
 
   @Get('me')
   @UseGuards(AuthGuard)
-  me() {
+  me(@Headers('x-session-token') token: string) {
     return this.authService.validate(token);
   }
 }
