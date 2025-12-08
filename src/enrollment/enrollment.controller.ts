@@ -10,7 +10,8 @@ import { EnrollmentService } from './enrollment.service';
 import { EnrollDto } from './dto/enroll.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CurrentUser } from '../auth/decorator/current-user.decorator'; 
-
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth()
 @Controller('enrollments')
 @UseGuards(AuthGuard)
 export class EnrollmentController {
@@ -21,7 +22,7 @@ export class EnrollmentController {
   enrollUser(
     @Body() data: EnrollDto,
     @CurrentUser() user,
-    @Headers('x-session-token') token: string,
+     
   ) {
     // always enroll the logged-in user
     console.log('Enrolling user:', user);
@@ -32,7 +33,7 @@ export class EnrollmentController {
   // Get authenticated user's enrollments
   @Get()
   getEnrollments(@CurrentUser() user,
-    @Headers('x-session-token') token: string,
+     
   ) {
     // always return enrollments of the logged-in user
     return this.enrollmentService.getUserEnrollments(user.id);
