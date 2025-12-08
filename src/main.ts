@@ -23,17 +23,7 @@ async function bootstrapServer() {
     .setDescription('Language learning API description')
     .setVersion('1.0')
     .addTag('ez-train')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'UUID',
-        name: 'Authorization',
-        description: 'Enter token here',
-        in: 'header',
-      },
-      'Bearer',
-    )
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
