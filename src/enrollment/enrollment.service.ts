@@ -18,7 +18,9 @@ export class EnrollmentService {
     if (!user) throw new NotFoundException('User not found');
 
     // Check course exists
-    const course = await this.prisma.course.findUnique({ where: { id: courseId } });
+    const course = await this.prisma.course.findUnique({
+      where: { id: courseId },
+    });
     if (!course) throw new NotFoundException('Course not found');
 
     // Check if already enrolled

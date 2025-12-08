@@ -6,6 +6,7 @@ import {
   Post,
   UseGuards,
   Req,
+  Headers
 } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { TakeQuizDto } from './dto/take-quiz.dto';
@@ -21,6 +22,7 @@ export class QuizController {
     @Param('quizId', ParseIntPipe) quizId: number,
     @Body() dto: TakeQuizDto,
     @Req() req,
+     @Headers('x-session-token') token: string,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     const userId = req.user.id;
